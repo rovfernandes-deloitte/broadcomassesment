@@ -15,11 +15,14 @@ import ClayDatePicker from "@clayui/date-picker";
 import { Formik, Field, Form, ErrorMessage, useFormikContext } from "formik";
 import * as Yup from "yup";
 import NavBar from "../NavBar/NavBar";
+import ClayAlert from "@clayui/alert";
+import axios from "axios";
 const spritemap = "/icons.svg";
 
 const Project: React.FC = () => {
   const name = localStorage.getItem("name");
   const formik = useFormikContext();
+  const [info, setInfo] = useState("");
   const [dateValue1, setDateValue1] = useState("");
   const [datevalue2, setDateValue2] = useState("");
   const [values, setValues] = useState({ name: "", owner: "" });
@@ -50,6 +53,41 @@ const Project: React.FC = () => {
               onSubmit={(values, { setSubmitting }) => {
                 // Handle form submission here
                 console.log("Form submitted with values:", values);
+                const url =
+                  "https://hu-22-angular-mockapi-urtjok3rza-wl.a.run.app/project"; // Replace with your API endpoint
+                const data = {
+                  projectName: values.name,
+                  projectOwner: 1,
+                  projectStartDate: "2022-02-14T12:00:00Z",
+                  projectEndDate: "2022-02-15T12:00:00Z",
+                };
+
+                const headers = {
+                  userid: 1,
+                };
+
+                axios
+                  .post(url, data, { headers })
+                  .then((response) => {
+                    // Handle a successful response here
+                    console.log("Response:", response.data);
+                    setInfo(response.data.message);
+                    setTimeout(() => {
+                      setInfo("");
+                    }, 5000);
+                  })
+                  .catch((error) => {
+                    // Handle errors here
+                    setInfo("Error creating project");
+                    setTimeout(() => {
+                      setInfo("");
+                    }, 5000);
+                    console.error("Error:", error);
+                  });
+                // setInfo("eee");
+                // setTimeout(() => {
+                //   setInfo("");
+                // }, 5000);
                 setSubmitting(false);
               }}
             >
@@ -200,6 +238,22 @@ const Project: React.FC = () => {
                   >
                     Create
                   </ClayButton>
+                </ClayLayout.Col>
+                <ClayLayout.Col
+                  size={12}
+                  className={styles.outBoxInnerrightBoxResetCreate}
+                >
+                  {info === "" ? (
+                    <></>
+                  ) : (
+                    <ClayAlert
+                      displayType="info"
+                      spritemap={spritemap}
+                      title="Info"
+                    >
+                      {info}
+                    </ClayAlert>
+                  )}
                 </ClayLayout.Col>
               </Form>
             </Formik>

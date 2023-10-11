@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@clayui/alert": "^3.93.0",
     "@clayui/badge": "^3.100.0",
     "@clayui/button": "^3.100.0",
     "@clayui/card": "^3.105.0",

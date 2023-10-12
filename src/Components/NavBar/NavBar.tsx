@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ClayVerticalNav } from "@clayui/nav";
-import ClayLayout from "@clayui/layout";
 import styles from "./NavBar.module.scss";
 
 import ClayButton, { ClayButtonWithIcon } from "@clayui/button";
@@ -10,10 +8,20 @@ import ClayUpperToolbar from "@clayui/upper-toolbar";
 import ClaySticker from "@clayui/sticker";
 import axios from "axios";
 import { useOktaAuth } from "@okta/okta-react";
+import { useHistory } from "react-router-dom";
 
 const spritemap = "/icons.svg";
 
 const NavBar: React.FC = () => {
+  const history = useHistory();
+  useEffect(() => {
+    const token = localStorage.getItem("okta-token-storage");
+    if (token === null) {
+      history.push("/");
+    } else if (token.length === 2) {
+      history.push("/");
+    }
+  });
   const [name, setName] = useState("");
   const { oktaAuth, authState } = useOktaAuth();
   useEffect(() => {
